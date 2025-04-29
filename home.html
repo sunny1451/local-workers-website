@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Emergency Services - Local Workers</title>
+  <link href="file:///C:/Users/sunny/OneDrive/Desktop/beautiful%20home/search%20bar/script.html" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #dbe6f6, #c5796d);
+      color: #333;
+      padding: 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background-color: #ffffffcc;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      color: #444;
+    }
+
+    .nav-button {
+      margin-left: 10px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      font-weight: 500;
+      background-color: #444;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .nav-button:hover {
+      background-color: #222;
+      transform: scale(1.05);
+    }
+
+    .hero {
+      text-align: center;
+      padding: 30px;
+      margin-bottom: 30px;
+      background-color: #ffffffdd;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: #555;
+    }
+
+    .cta-button {
+      margin-top: 20px;
+      padding: 12px 30px;
+      background-color: #ff5e62;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .cta-button:hover {
+      background-color: #e8494f;
+    }
+
+    h2 {
+      text-align: center;
+      margin: 30px 0 20px;
+      color: #222;
+    }
+
+    .service-card-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .service-card {
+      background-color: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+      text-align: center;
+      padding-bottom: 20px;
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .service-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+
+    .service-card h3 {
+      margin: 15px 0;
+      font-size: 20px;
+      color: #333;
+    }
+
+    .emergency-btn {
+      padding: 10px 20px;
+      background-color: #FFD700;
+      color: #222;
+      font-weight: bold;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .emergency-btn:hover {
+      background-color: #ffc107;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #333;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">Local Workers</div>
+    <nav>
+      <button class="nav-button" onclick="goToPagehome()">Home</button>
+      <button class="nav-button" onclick="goToPageabout()">About</button>
+      <button class="nav-button" onclick="goToPagecontact()">Tracker</button>
+      <button class="nav-button" onclick="goToPagelogin()">Logout</button>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Bharat Moves with Local Workers!</h1>
+    <p>Find Trusted Professionals in Your Area – Fast, Reliable, and Verified.</p>
+    <button class="cta-button" id="findWorker">Find a Worker</button>
+  </section>
+
+  <!-- Emergency Services -->
+  <h2>Emergency Services</h2>
+  <div class="service-card-container">
+
+    <div class="service-card">
+      <img src="https://usagif.com/wp-content/uploads/gifs/police-car-77.gif" alt="Police">
+      <h3>Police</h3>
+      <button class="emergency-btn" onclick="handleEmergency('Police')">Emergency</button>
+    </div>
+
+    <div class="service-card">
+      <img src="https://static.vecteezy.com/system/resources/previews/004/341/407/non_2x/evacuating-people-from-flooded-house-flat-color-illustration-rescue-operation-trapped-on-rooftop-family-rescued-by-first-responder-2d-cartoon-characters-with-cityscape-on-background-vector.jpg" alt="Fire and Rescue">
+      <h3>Fire and Rescue</h3>
+      <button class="emergency-btn" onclick="handleEmergency('Fire and Rescue')">Emergency</button>
+    </div>
+
+    <div class="service-card">
+      <img src="https://cdn.dribbble.com/users/1481285/screenshots/6084001/___.gif" alt="Ambulance">
+      <h3>Ambulance</h3>
+      <button class="emergency-btn" onclick="handleEmergency('Ambulance')">Emergency</button>
+    </div>
+
+    <div class="service-card">
+      <img src="https://theforefrontmagazine.com/wp-content/uploads/2024/07/Maternal.png" alt="Woman and Child Care">
+      <h3>Woman and Child Care</h3>
+      <button class="emergency-btn" onclick="handleEmergency('Woman and Child Care')">Emergency</button>
+    </div>
+
+    <div class="service-card">
+      <img src="https://static.vecteezy.com/system/resources/previews/015/087/787/original/graphic-flat-design-drawing-policeman-on-crossing-path-near-traffic-light-in-full-uniform-lifting-traffic-stop-sign-controlling-crowd-of-vehicles-during-rush-hour-cartoon-style-illustration-vector.jpg" alt="Traffic Police">
+      <h3>Traffic Police</h3>
+      <button class="emergency-btn" onclick="handleEmergency('Traffic Police')">Emergency</button>
+    </div>
+
+    <div class="service-card">
+      <img src="https://tse4.mm.bing.net/th?id=OIP.O74IdSwhAz3hWfCKyAHBIgHaFj&pid=Api&P=0&h=180" alt="Accident">
+      <h3>Accident</h3>
+      <button class="emergency-btn" onclick="handleEmergency('Accident')">Emergency</button>
+    </div>
+
+    <div class="service-card">
+      <img src="https://cdn.supergas.com/-/media/sites/india/blog/lpg-emergency-safety-tips.jpg?mw=1366&rev=92155d74886e4021a0bbbb6523450d88&sc_lang=en-in" alt="LPG Emergency Help">
+      <h3>LPG Emergency Help</h3>
+      <button class="emergency-btn" onclick="handleEmergency('LPG Emergency Help')">Emergency</button>
+    </div>
+
+    <div class="service-card">
+      <img src="https://lh7-us.googleusercontent.com/nGfNDMpj50JphG71COfTVfqEzd5K_pXnNFSQVA4VRqvb8_if1weOuzxDO9A7hx-3XD4HI6fhn6MOS1OfYe35ITiIenPN_DhaoEXjerD-DRbmzW39RZgVhdQfO12ZrAfozwdNSZLTYJ6y9oOVG0mM9GY" alt="Cyber Security">
+      <h3>Cyber Security</h3>
+      <button class="emergency-btn" onclick="handleEmergency('Cyber Security')">Emergency</button>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    &copy; 2025 Local Workers. All rights reserved.
+  </footer>
+
+  <script>
+    function goToPagehome() {
+      window.location.href = 'home.html';
+    }
+
+    function goToPageabout() {
+      window.location.href = 'file:///C:/Users/sunny/OneDrive/Desktop/beautiful%20home/about/about.html';
+    }
+
+    function goToPagecontact() {
+      window.location.href = 'file:///C:/Users/sunny/OneDrive/Desktop/beautiful%20home/tracking/contact.html';
+    }
+
+    function goToPagelogin() {
+      window.location.href = 'login.html';
+    }
+
+    document.getElementById('findWorker').addEventListener('click', function () {
+      alert("Redirecting to the worker page...");
+      window.location.href = 'file:///C:/Users/sunny/OneDrive/Desktop/beautiful%20home/search%20bar/script.html';
+    });
+
+    function handleEmergency(service) {
+      alert(`Your address is tracked. ${service} team will reach within minutes.`);
+    }
+  </script>
+</body>
+</html>

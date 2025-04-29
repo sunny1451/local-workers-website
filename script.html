@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explore Services - IntiSeva</title>
+  <link rel="stylesheet" href="styles4.css">
+  <script src="main.js" defer></script>
+</head>
+<body>
+  <header class="header">
+    <nav class="nav" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px;">
+      <div class="logo-text" style="font-size: 24px; font-weight: bold; color: #fff;">Local worker</div>
+      <div style="display: flex; gap: 10px;">
+        <button id="homeBtn" class="nav-button home" style="background-color: #007bff; color: white; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; transition: background-color 0.3s;">Home</button>
+        <button id="aboutBtn" class="nav-button about" style="background-color: #28a745; color: white; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; transition: background-color 0.3s;">About</button>
+        <button id="contactBtn" class="nav-button contact" style="background-color: #ffc107; color: white; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; transition: background-color 0.3s;">Tracker</button>
+        <button id="loginBtn" class="nav-button login" style="background-color: #dc3545; color: white; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; transition: background-color 0.3s;">Logout</button>
+      </div>
+    </nav>
+  </header>
+<style>
+  /* NAVBAR BACKGROUND */
+.header {
+  background: #222;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+/* LOGO */
+.logo-text {
+  font-size: 28px;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+}
+
+/* COMMON BUTTON STYLES */
+.nav-button {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  color: #fff;
+}
+
+/* INDIVIDUAL BUTTON GRADIENTS */
+.home {
+  background: linear-gradient(135deg, #36D1DC 0%, #5B86E5 100%);
+}
+.about {
+  background: linear-gradient(135deg, #11998E 0%, #38EF7D 100%);
+}
+.contact {
+  background: linear-gradient(135deg, #F7971E 0%, #FFD200 100%);
+}
+.login {
+  background: linear-gradient(135deg, #E53935 0%, #E35D5B 100%);
+}
+
+/* HOVER & ACTIVE EFFECTS */
+.nav-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+.nav-button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+
+/* OPTIONAL: more vibrant hover gradients */
+.home:hover {
+  background: linear-gradient(135deg, #5B86E5 0%, #36D1DC 100%);
+}
+.about:hover {
+  background: linear-gradient(135deg, #38EF7D 0%, #11998E 100%);
+}
+.contact:hover {
+  background: linear-gradient(135deg, #FFD200 0%, #F7971E 100%);
+}
+.login:hover {
+  background: linear-gradient(135deg, #E35D5B 0%, #E53935 100%);
+}
+</style>
+  <section class="intro-section">
+    <p>
+      Welcome to the heart of <strong>Local workers website</strong> — where finding reliable help is just a tap away.
+      Whether it’s a sudden power issue, a leaky pipe, or a deep house cleaning, our <strong>User Request Page</strong>
+      is designed to make your life easier. With a sleek, intuitive layout, you can choose the service you need,
+      set your preferred time, and get matched instantly with <strong>verified, trusted local workers</strong>.
+      Every professional comes with real reviews, ratings, and a verified profile — so you always know who’s
+      coming to your doorstep. Track your request live, chat directly with the worker, and pay securely through
+      UPI or card. With just <strong>3 simple steps — request, relax, and rate</strong> — Local workers turns home
+      service into a stress-free experience. It’s like having a personal worker assistant in your pocket, 24/7.
+    </p>
+  </section>
+
+  <!-- Search Bar -->
+  <div class="search-container" style="text-align:center; margin:20px;">
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Search for a service..."
+      style="width:60%; padding:12px 20px; font-size:18px; border-radius:25px; border:1px solid #ccc;"
+    />
+  </div>
+
+  <section class="services-container" id="servicesContainer">
+    <div class="service-card" data-name="Electrician">
+      <img src="https://img.icons8.com/color/96/000000/electricity.png" alt="Electrician">
+      <div class="service-title">Electrician</div>
+      <button class="request-button">Request</button>
+    </div>
+    <div class="service-card" data-name="Plumber">
+      <img src="https://img.icons8.com/color/96/000000/plumber.png" alt="Plumber">
+      <div class="service-title">Plumber</div>
+      <button class="request-button">Request</button>
+    </div>
+    <div class="service-card" data-name="AC Service">
+      <img src="https://img.icons8.com/color/96/000000/air-conditioner.png" alt="AC Service">
+      <div class="service-title">AC Service</div>
+      <button class="request-button">Request</button>
+    </div>
+    <div class="service-card" data-name="Cleaner">
+      <img src="https://img.freepik.com/premium-vector/cleaning-service-man-with-mop-bucket-male-janitor-cartoon-character_338371-872.jpg?w=2000" alt="Cleaner">
+      <div class="service-title">Cleaner</div>
+      <button class="request-button">Request</button>
+    </div>
+    <div class="service-card" data-name="Washing Machine Repair">
+      <img src="https://img.icons8.com/color/96/000000/washing-machine.png" alt="Washing Machine Repair">
+      <div class="service-title">Washing Machine Repair</div>
+      <button class="request-button">Request</button>
+    </div>
+    <div class="service-card" data-name="Refrigerator Maintenance">
+      <img src="https://static.vecteezy.com/system/resources/previews/036/877/781/non_2x/hvac-service-cartoon-character-repairing-refrigerator-design-illustration-vector.jpg" alt="Refrigerator Maintenance">
+      <div class="service-title">Refrigerator Maintenance</div>
+      <button class="request-button">Request</button>
+    </div>
+    <div class="service-card" data-name="Beautician">
+      <img src="https://cdn3.iconfinder.com/data/icons/beauty-salon/234/beauty-services-003-512.png" alt="Beautician">
+      <div class="service-title">Beautician</div>
+      <button class="request-button">Request</button>
+    </div>
+    <div class="service-card" data-name="Massage Therapist">
+      <img src="https://img.icons8.com/color/96/000000/massage.png" alt="Massage Therapist">
+      <div class="service-title">Massage Therapist</div>
+      <button class="request-button">Request</button>
+    </div>
+    <div class="service-card" data-name="Photographer">
+      <img src="https://img.icons8.com/color/96/000000/camera.png" alt="Photographer">
+      <div class="service-title">Photographer</div>
+      <button class="request-button">Request</button>
+    </div>
+    <div class="service-card" data-name="Caterer">
+      <img src="https://cdn-icons-png.flaticon.com/512/2755/2755281.png" alt="Caretaker">
+      <div class="service-title">Caretaker</div>
+      <button class="request-button">Request</button>
+    </div>
+    <div class="service-card" data-name="Laptop Repair">
+      <img src="https://img.icons8.com/color/96/000000/laptop.png" alt="Laptop Repair">
+      <div class="service-title">Laptop Repair</div>
+      <button class="request-button">Request</button>
+    </div>
+    <div class="service-card" data-name="WiFi Setup">
+      <img src="https://img.icons8.com/color/96/000000/wifi.png" alt="WiFi Setup">
+      <div class="service-title">WiFi Setup</div>
+      <button class="request-button">Request</button>
+    </div>
+    <div class="service-card" data-name="Car Mechanic">
+      <img src="https://cdn-icons-png.flaticon.com/512/814/814406.png" alt="Car Mechanic">
+      <div class="service-title">Car Mechanic</div>
+      <button class="request-button">Request</button>
+    </div>
+    <div class="service-card" data-name="Bike Servicing">
+      <img src="https://img.icons8.com/color/96/000000/motorcycle.png" alt="Bike Servicing">
+      <div class="service-title">Bike Servicing</div>
+      <button class="request-button">Request</button>
+    </div>
+    <div class="service-card" data-name="Nurse on Call">
+      <img src="https://cdn-icons-png.flaticon.com/512/3209/3209028.png" alt="Nurse on Call">
+      <div class="service-title">Nurse on Call</div>
+      <button class="request-button">Request</button>
+    </div>
+    <div class="service-card" data-name="Physiotherapy">
+      <img src="https://cdn-icons-png.flaticon.com/512/6180/6180517.png" alt="Physiotherapy">
+      <div class="service-title">Physiotherapy</div>
+      <button class="request-button">Request</button>
+    </div>
+    <div class="service-card" data-name="Mason">
+      <img src="https://cdn-icons-png.flaticon.com/512/4860/4860736.png" alt="Mason">
+      <div class="service-title">Mason</div>
+      <button class="request-button">Request</button>
+    </div>
+    <div class="service-card" data-name="Painter">
+      <img src="https://img.icons8.com/color/96/000000/paint.png" alt="Painter">
+      <div class="service-title">Painter</div>
+      <button class="request-button">Request</button>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Local workers website | Empowering people trust ❤️</p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

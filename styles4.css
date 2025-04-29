@@ -1,0 +1,102 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f7f8fa;
+  color: #333;
+}
+
+header {
+  background-color: #0077ff;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2em;
+}
+
+header p {
+  font-size: 1em;
+  margin-top: 5px;
+}
+
+#searchBar {
+  margin-top: 15px;
+  padding: 10px;
+  width: 80%;
+  max-width: 400px;
+  border-radius: 10px;
+  border: none;
+  font-size: 1em;
+}
+
+.intro-section {
+  padding: 20px;
+  max-width: 900px;
+  margin: auto;
+  font-size: 1.1em;
+  line-height: 1.6;
+  color: #555;
+}
+
+.services-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px;
+  gap: 20px;
+}
+
+.service-card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 180px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.service-card img {
+  width: 80px;
+  height: 80px;
+}
+
+.service-title {
+  margin: 10px 0;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.request-button {
+  background-color: #28a745;
+  color: white;
+  padding: 8px 14px;
+  font-size: 0.9em;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.request-button:hover {
+  background-color: #218838;
+}
+
+footer {
+  background-color: #f1f1f1;
+  text-align: center;
+  padding: 15px;
+  margin-top: 40px;
+  font-size: 0.9em;
+  color: #888;
+}

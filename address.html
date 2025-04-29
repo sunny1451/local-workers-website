@@ -169,53 +169,57 @@
     let latestDocId = "";
 
     document.getElementById("addressForm").addEventListener("submit", async e => {
-      e.preventDefault();
+  e.preventDefault();
 
-      const name = document.getElementById("fullName").value.trim();
-      const phone = document.getElementById("phoneNumber").value.trim();
-      const house = document.getElementById("houseNo").value.trim();
-      const area = document.getElementById("area").value.trim();
-      const city = document.getElementById("city").value.trim();
+  const name = document.getElementById("fullName").value.trim();
+  const phone = document.getElementById("phoneNumber").value.trim();
+  const house = document.getElementById("houseNo").value.trim();
+  const area = document.getElementById("area").value.trim();
+  const city = document.getElementById("city").value.trim();
 
-      // Fetch saved latitude and longitude from localStorage
-      const latitude = localStorage.getItem("selectedLatitude");
-      const longitude = localStorage.getItem("selectedLongitude");
+  // Fetch saved latitude and longitude from localStorage
+  const latitude = localStorage.getItem("selectedLatitude");
+  const longitude = localStorage.getItem("selectedLongitude");
 
-      if (!latitude || !longitude) {
-        alert("❗ Please select your location on the map first!");
-        return;
-      }
+  if (!latitude || !longitude) {
+    alert("❗ Please select your location on the map first!");
+    return;
+  }
 
-      try {
-        const docRef = await addDoc(collection(db, "addresses"), {
-          name,
-          phone,
-          house,
-          area,
-          city,
-          service: selectedService,
-          latitude: parseFloat(latitude),
-          longitude: parseFloat(longitude),
-          status: "pending",
-          timestamp: serverTimestamp()
-        });
-
-        latestDocId = docRef.id;
-
-        document.getElementById("trackingIdText").textContent = latestDocId;
-        document.getElementById("topTrackingIdText").textContent = latestDocId;
-        document.getElementById("trackingInfo").style.display = "block";
-        document.getElementById("topTrackingBanner").style.display = "block";
-
-        // Clear location after successful submit
-        localStorage.removeItem("selectedLatitude");
-        localStorage.removeItem("selectedLongitude");
-
-      } catch (error) {
-        console.error("Error adding document: ", error);
-        alert("Failed to submit your request. Please try again.");
-      }
+  try {
+    const docRef = await addDoc(collection(db, "addresses"), {
+      name,
+      phone,
+      house,
+      area,
+      city,
+      service: selectedService,
+      latitude: parseFloat(latitude),
+      longitude: parseFloat(longitude),
+      status: "pending",
+      timestamp: serverTimestamp()
     });
+
+    latestDocId = docRef.id;
+
+    document.getElementById("trackingIdText").textContent = latestDocId;
+    document.getElementById("topTrackingIdText").textContent = latestDocId;
+    document.getElementById("trackingInfo").style.display = "block";
+    document.getElementById("topTrackingBanner").style.display = "block";
+
+    // Clear location after successful submit
+    localStorage.removeItem("selectedLatitude");
+    localStorage.removeItem("selectedLongitude");
+
+    // Redirect to another page (e.g., "thank_you.html")
+    window.location.href = "https://sunny1451.github.io/local-workers-website/script.html"; // Change the URL to the page you want to navigate to
+
+  } catch (error) {
+    console.error("Error adding document: ", error);
+    alert("Failed to submit your request. Please try again.");
+  }
+});
+
 
     document.getElementById("copyBtn").addEventListener("click", () => {
       navigator.clipboard.writeText(latestDocId).then(() => {

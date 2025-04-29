@@ -1,0 +1,96 @@
+/* General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to bottom right, #000000, #FFD700, #ffffff);
+    color: white;
+    overflow-x: hidden;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background: #000000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+    align-items: center;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: #FFD700;
+}
+
+.nav a {
+    margin-left: 30px;
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav a:hover {
+    color: #FFD700;
+}
+
+/* About Section */
+.about {
+    padding: 100px 20px;
+    text-align: center;
+    background: linear-gradient(to bottom right, #000000, #1a1a1a);
+}
+
+.about h1, .about h2 {
+    color: #FFD700;
+    margin-bottom: 30px;
+}
+
+.about p {
+    font-size: 20px;
+    line-height: 1.8;
+    margin-bottom: 40px;
+}
+
+.about ul {
+    list-style: none;
+    padding: 0;
+}
+
+.about ul li {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.about a {
+    color: #FFD700;
+    text-decoration: none;
+}
+
+.about a:hover {
+    text-decoration: underline;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 30px;
+    background: #000000;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .about h1 {
+        font-size: 40px;
+    }
+
+    .about p, .about ul li {
+        font-size: 18px;
+    }
+
+    .nav a {
+        margin-left: 15px;
+    }
+}

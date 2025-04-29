@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Local Workers App</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1f4037, #99f2c8);
+            color: white;
+            overflow-x: hidden;
+            animation: gradientShift 12s ease infinite;
+            line-height: 1.8;
+            scroll-behavior: smooth;
+        }
+
+        @keyframes gradientShift {
+            0% { background: linear-gradient(135deg, #1f4037, #99f2c8); }
+            50% { background: linear-gradient(135deg, #360033, #0b8793); }
+            100% { background: linear-gradient(135deg, #1f4037, #99f2c8); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.85);
+            text-align: center;
+            padding: 30px 20px;
+            border-bottom: 4px solid #FFD700;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6);
+            font-size: 3.5rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            animation: fadeIn 2s ease;
+        }
+
+        section {
+            margin: 50px 0;
+            padding: 50px;
+            border-radius: 25px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.7);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        section:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+        }
+
+        h1, h2 {
+            color: #FFD700;
+            text-align: center;
+            text-shadow: 4px 4px 12px rgba(0, 0, 0, 0.9);
+        }
+
+        p, li {
+            font-size: 1.3rem;
+            line-height: 2;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 20px 0;
+        }
+
+        a {
+            color: #FFD700;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #FF6347;
+        }
+
+        .developer-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 50px;
+        }
+
+        .developer-pic {
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.9);
+        }
+
+        .social-links a {
+            margin: 0 10px;
+            font-size: 1.8rem;
+            transition: transform 0.3s ease, color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            border: 2px solid #FFD700;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.7);
+        }
+
+        .social-links a:hover {
+            transform: scale(1.2);
+            color: #FF6347;
+            background: rgba(255, 215, 0, 0.2);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            background: rgba(0, 0, 0, 0.85);
+            box-shadow: 0 -6px 30px rgba(0, 0, 0, 0.8);
+        }
+
+        .highlight {
+            color: #FF6347;
+            font-weight: bold;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .icon {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">Local workers website</header>
+
+    <div class="container">
+
+        <section>
+            <h1>About the Developer</h1>
+            <div class="developer-section">
+                <img src="c:\Users\sunny\OneDrive\Desktop\sunny.jpg" alt="Developer Picture" class="developer-pic">
+                <div class="developer-info">
+                    <p><span class="highlight">Name:</span> Sunny Kothakonda</p>
+                    <p><span class="highlight">Role:</span> CEO </p>
+                    <p><span class="highlight">Vision:</span> To innovate user-friendly platforms for seamless experiences.</p>
+                    <div class="social-links">
+                        <a href="https://github.com/sunnykothakonda" target="_blank"><span class="icon">🐙</span> GitHub</a>
+                        <a href="https://www.linkedin.com/in/sunny-kothakonda-13616a281" target="_blank"><span class="icon">🔗</span> LinkedIn</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h1>About Local workers website</h1>
+            <p>At Local workers website, we connect you with skilled and verified professionals in your area.  where finding reliable help is just a tap away.
+                Whether it’s a sudden power issue, a leaky pipe, or a deep house cleaning, our <strong>User Request Page</strong>
+                is designed to make your life easier. With a sleek, intuitive layout, you can choose the service you need,
+                set your preferred time, and get matched instantly with <strong>verified, trusted local workers</strong>.
+                Every professional comes with real reviews, ratings, and a verified profile — so you always know who’s
+                coming to your doorstep. Track your request live, chat directly with the worker, and pay securely through
+                UPI or card. With just <strong>3 simple steps — request, relax, and rate</strong> — SkillLink turns home
+                service into a stress-free experience. It’s like having a personal worker assistant in your pocket, 24/7.
+          </p>
+
+            <h2>Why Choose Us?</h2>
+            <ul>
+                <li><span class="highlight">Verified Professionals:</span> Every worker is verified with government-approved IDs.</li>
+                <li><span class="highlight">24/7 Support:</span> We’re here to help anytime you need us.</li>
+                <li><span class="highlight">Secure Payments:</span> Easy and secure payment options for your convenience.</li>
+                <li><span class="highlight">Customer Satisfaction:</span> Your satisfaction is our priority – every time.</li>
+            </ul>
+        </section>
+
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2025 Local workers website. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

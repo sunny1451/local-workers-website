@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = 'file:///C:/Users/sunny/OneDrive/Desktop/beautiful%20home/home/home.html';
   });
   document.getElementById('aboutBtn').addEventListener('click', () => {
-    window.location.href = 'file:///C:/Users/sunny/OneDrive/Desktop/beautiful%20home/about/about.html';
+    window.location.href = 'https://sunny1451.github.io/local-workers-website/about.html';
   });
   document.getElementById('contactBtn').addEventListener('click', () => {
     window.location.href = 'file:///C:/Users/sunny/OneDrive/Desktop/beautiful%20home/tracking/contact.html';

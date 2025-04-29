@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Navigation buttons
   document.getElementById('homeBtn').addEventListener('click', () => {
-    window.location.href = 'file:///C:/Users/sunny/OneDrive/Desktop/beautiful%20home/home/home.html';
+    window.location.href = 'https://sunny1451.github.io/local-workers-website/home.html';
   });
   document.getElementById('aboutBtn').addEventListener('click', () => {
     window.location.href = 'https://sunny1451.github.io/local-workers-website/about.html';

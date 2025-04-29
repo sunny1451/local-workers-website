@@ -1,0 +1,131 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Select Location</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+  <style>
+    body, html { margin: 0; padding: 0; height: 100%; }
+    #map { height: 100vh; width: 100%; }
+    .button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+  </style>
+</head>
+
+<body>
+  <button class="button" id="saveLocationBtn">Save Location</button>
+  <div id="map"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDx8pX-pIxre6aFYmf4_pdE4D770mhghsQ",
+      authDomain: "sunnyservices-738b7.firebaseapp.com",
+      projectId: "sunnyservices-738b7",
+      storageBucket: "sunnyservices-738b7.appspot.com",
+      messagingSenderId: "583577838613",
+      appId: "1:583577838613:web:c74d4db872b4d16fddda1c",
+      measurementId: "G-2BDCSXPBQE"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const map = L.map('map').setView([17.385044, 78.486671], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    let selectedMarker = null;
+
+    // Add Search Box (Geocoder)
+    const geocoder = L.Control.geocoder({
+      defaultMarkGeocode: false
+    })
+    .on('markgeocode', function(e) {
+      const latlng = e.geocode.center;
+      map.setView(latlng, 16);
+
+      if (selectedMarker) {
+        selectedMarker.setLatLng(latlng);
+      } else {
+        selectedMarker = L.marker(latlng, { draggable: true }).addTo(map);
+      }
+
+      selectedMarker.bindPopup(`Latitude: ${latlng.lat.toFixed(5)}, Longitude: ${latlng.lng.toFixed(5)}`).openPopup();
+    })
+    .addTo(map);
+
+    // When user clicks on the map
+    map.on('click', function(e) {
+      const lat = e.latlng.lat;
+      const lng = e.latlng.lng;
+
+      if (selectedMarker) {
+        selectedMarker.setLatLng([lat, lng]);
+      } else {
+        selectedMarker = L.marker([lat, lng], { draggable: true }).addTo(map);
+      }
+
+      selectedMarker.bindPopup(`Latitude: ${lat.toFixed(5)}, Longitude: ${lng.toFixed(5)}`).openPopup();
+    });
+
+    // Save Location Button
+    document.getElementById("saveLocationBtn").addEventListener('click', async function() {
+      if (!selectedMarker) {
+        alert("❗ Please select a location first!");
+        return;
+      }
+
+      const lat = selectedMarker.getLatLng().lat;
+      const lng = selectedMarker.getLatLng().lng;
+
+      try {
+        // Reverse Geocoding to get Area Name
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+        const data = await response.json();
+        const address = data.address;
+
+        console.log(address); // Check address fields
+
+        let area = address.suburb || address.village || address.neighbourhood || address.town || address.city_district || address.city || "";
+
+        area = area.toLowerCase();
+
+        if (area.includes("kukatpally") || area.includes("kphb") || area.includes("madhapur") || area.includes("dilsukhnagar")) {
+          // Save into localStorage
+          localStorage.setItem("selectedLatitude", lat);
+          localStorage.setItem("selectedLongitude", lng);
+
+          alert("✅ Location saved! Now fill address details.");
+
+          // Redirect to the form
+          window.location.href = 'file:///C:/Users/sunny/OneDrive/Desktop/beautiful%20home/address/address.html';
+        } else {
+          alert("❗ Currently, we are not providing services in your location.");
+        }
+      } catch (error) {
+        console.error("Error fetching location details:", error);
+        alert("⚠️ Could not fetch location details. Try again.");
+      }
+    });
+  </script>
+</body>
+</html>

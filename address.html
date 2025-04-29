@@ -1,0 +1,231 @@
+<!DOCTYPE html>  
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Service Request</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f0f2f5;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #007bff;
+      margin-bottom: 30px;
+      font-weight: 700;
+    }
+    form {
+      max-width: 500px;
+      margin: auto;
+      background: #ffffff;
+      padding: 35px 30px;
+      border-radius: 20px;
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+    }
+    input, select {
+      width: 100%;
+      padding: 14px 16px;
+      margin: 10px 0 20px 0;
+      border: 1.8px solid #d4d4d4;
+      border-radius: 12px;
+      font-size: 16px;
+      background-color: #fafafa;
+      transition: all 0.3s ease;
+    }
+    input:focus, select:focus {
+      border-color: #007bff;
+      background-color: #e8f0fe;
+      outline: none;
+    }
+    button {
+      width: 100%;
+      padding: 14px 16px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 5px;
+      transition: all 0.3s ease;
+    }
+    button[type="submit"] {
+      background-color: #007bff;
+      color: white;
+      margin-top: 10px;
+    }
+    button[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+    p#selectedServiceDisplay {
+      background: #e8f4ff;
+      padding: 10px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: 600;
+      color: #0056b3;
+      margin-bottom: 25px;
+    }
+    #topTrackingBanner {
+      display: none;
+      background-color: #c7f5d9;
+      padding: 10px;
+      text-align: center;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-weight: 600;
+      color: #2e7d32;
+    }
+    #trackingInfo {
+      display: none;
+      background-color: #d1ffd6;
+      padding: 20px;
+      margin-top: 30px;
+      border-radius: 15px;
+      text-align: center;
+      color: #2d6a4f;
+      font-weight: bold;
+      box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+    }
+    #copyBtn {
+      margin-top: 15px;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 10px;
+    }
+    #copyBtn:hover {
+      background-color: #0056b3;
+    }
+    #copySuccess {
+      display: none;
+      background-color: #c7f5d9;
+      padding: 5px;
+      border-radius: 10px;
+      margin-top: 10px;
+      text-align: center;
+      color: #2e7d32;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Service Request</h1>
+
+  <div id="topTrackingBanner">
+    Your Tracking ID: <span id="topTrackingIdText"></span>
+  </div>
+
+  <form id="addressForm">
+    <p id="selectedServiceDisplay"></p>
+
+    <input type="text" id="fullName" placeholder="Full Name" required>
+
+    <input type="tel" id="phoneNumber" placeholder="Phone Number" required>
+
+    <input type="text" id="houseNo" placeholder="House/Flat Number" required>
+
+    <select id="area" required>
+      <option value="">Select Area</option>
+      <option value="Kukatpally">Kukatpally</option>
+      <option value="Madhapur">Madhapur</option>
+      <option value="Dilsukhnagar">Dilsukhnagar</option>
+    </select>
+
+    <input type="text" id="city" placeholder="City" required>
+
+    <button type="submit">Submit Request</button>
+  </form>
+
+  <div id="trackingInfo">
+    <p>Thank you! Your request has been submitted.</p>
+    <p>Your Tracking ID: <span id="trackingIdText"></span></p>
+    <button id="copyBtn">Copy Tracking ID</button>
+    <div id="copySuccess">Tracking ID Copied!</div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDx8pX-pIxre6aFYmf4_pdE4D770mhghsQ",
+      authDomain: "sunnyservices-738b7.firebaseapp.com",
+      projectId: "sunnyservices-738b7",
+      storageBucket: "sunnyservices-738b7.appspot.com",
+      messagingSenderId: "583577838613",
+      appId: "1:583577838613:web:c74d4db872b4d16fddda1c",
+      measurementId: "G-2BDCSXPBQE"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Get selected service
+    const selectedService = localStorage.getItem("selectedService") || "Not selected";
+    document.getElementById("selectedServiceDisplay").textContent = `Service: ${selectedService}`;
+
+    let latestDocId = "";
+
+    document.getElementById("addressForm").addEventListener("submit", async e => {
+      e.preventDefault();
+
+      const name = document.getElementById("fullName").value.trim();
+      const phone = document.getElementById("phoneNumber").value.trim();
+      const house = document.getElementById("houseNo").value.trim();
+      const area = document.getElementById("area").value.trim();
+      const city = document.getElementById("city").value.trim();
+
+      // Fetch saved latitude and longitude from localStorage
+      const latitude = localStorage.getItem("selectedLatitude");
+      const longitude = localStorage.getItem("selectedLongitude");
+
+      if (!latitude || !longitude) {
+        alert("❗ Please select your location on the map first!");
+        return;
+      }
+
+      try {
+        const docRef = await addDoc(collection(db, "addresses"), {
+          name,
+          phone,
+          house,
+          area,
+          city,
+          service: selectedService,
+          latitude: parseFloat(latitude),
+          longitude: parseFloat(longitude),
+          status: "pending",
+          timestamp: serverTimestamp()
+        });
+
+        latestDocId = docRef.id;
+
+        document.getElementById("trackingIdText").textContent = latestDocId;
+        document.getElementById("topTrackingIdText").textContent = latestDocId;
+        document.getElementById("trackingInfo").style.display = "block";
+        document.getElementById("topTrackingBanner").style.display = "block";
+
+        // Clear location after successful submit
+        localStorage.removeItem("selectedLatitude");
+        localStorage.removeItem("selectedLongitude");
+
+      } catch (error) {
+        console.error("Error adding document: ", error);
+        alert("Failed to submit your request. Please try again.");
+      }
+    });
+
+    document.getElementById("copyBtn").addEventListener("click", () => {
+      navigator.clipboard.writeText(latestDocId).then(() => {
+        document.getElementById("copySuccess").style.display = "block";
+        setTimeout(() => {
+          document.getElementById("copySuccess").style.display = "none";
+        }, 2000);
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -38,5 +38,5 @@ function filterServices() {
 // Save selected service and redirect
 function redirectToRequest(serviceName) {
   localStorage.setItem('selectedService', serviceName);
-  window.location.href = 'https://sunny1451.github.io/local-workers-website/map.html';
+  window.location.href = 'https://sunny1451.github.io/local-workers-website/address.html';
 }

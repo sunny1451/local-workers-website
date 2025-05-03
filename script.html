@@ -266,38 +266,38 @@
   <p>© 2025 Local workers website | Empowering trust & service ❤️</p>
 </footer>
 <script>
-// Wait for DOM ready 
-document.addEventListener('DOMContentLoaded', () => {
-  // Navigation buttons
-  const homeBtn = document.getElementById('homeBtn');
-  const aboutBtn = document.getElementById('aboutBtn');
-  const contactBtn = document.getElementById('contactBtn');
-  const loginBtn = document.getElementById('loginBtn');
+  document.addEventListener('DOMContentLoaded', () => { 
+  // Select all buttons with the class "nav-button"
+  const buttons = document.querySelectorAll('.nav-button');
 
-  // Ensure the buttons exist before adding event listeners
-  if (homeBtn) {
-    homeBtn.addEventListener('click', () => {
-      window.location.href = 'https://sunny1451.github.io/local-workers-website/about.html';
-    });
-  }
-  
-  if (aboutBtn) {
-    aboutBtn.addEventListener('click', () => {
-      window.location.href = 'https://sunny1451.github.io/local-workers-website/about.html';
-    });
-  }
+  // Attach event listeners to all buttons
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      const buttonText = button.textContent.trim().toLowerCase();
 
-  if (contactBtn) {
-    contactBtn.addEventListener('click', () => {
-      window.location.href = 'file:///C:/Users/sunny/OneDrive/Desktop/beautiful%20home/tracking/contact.html';
+      // Navigate based on the button text
+      switch (buttonText) {
+        case 'home':
+          console.log('Navigating to home...');
+          window.location.href = 'file:///C:/Users/sunny/OneDrive/Desktop/beautiful%20home/home/home.html';
+          break;
+        case 'about':
+          console.log('Navigating to about...');
+          window.location.href = 'https://sunny1451.github.io/local-workers-website/about.html';
+          break;
+        case 'tracker':
+          console.log('Navigating to tracker...');
+          window.location.href = 'tracking/contact.html';
+          break;
+        case 'logout':
+          console.log('Logging out...');
+          window.location.href = 'login.html';
+          break;
+        default:
+          console.log('Button not recognized');
+      }
     });
-  }
-
-  if (loginBtn) {
-    loginBtn.addEventListener('click', () => {
-      window.location.href = 'file:///C:/Users/sunny/OneDrive/Desktop/new/beautiful%20home/login.html';
-    });
-  }
+  });
 
   // Search filter
   const searchInput = document.getElementById('searchInput');
@@ -332,6 +332,7 @@ function redirectToRequest(serviceName) {
   localStorage.setItem('selectedService', serviceName);
   window.location.href = 'https://sunny1451.github.io/local-workers-website/address.html';
 }
+
 </script>
 </body>
 </html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact Us - IntiSeva</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .header {
+      background-color: #0056b3;
+      color: white;
+      padding: 20px 30px;
+      text-align: center;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .tracking-section {
+      max-width: 550px;
+      margin: 40px auto 20px;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .tracking-section h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #0056b3;
+    }
+
+    .tracking-section input {
+      width: 100%;
+      padding: 12px 14px;
+      margin: 10px 0 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .tracking-section button {
+      width: 100%;
+      padding: 12px;
+      background: #007bff;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .tracking-section button:hover {
+      background: #0056b3;
+    }
+
+    .worker-info {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      background: #f0f9ff;
+      border-left: 5px solid #007bff;
+      border-radius: 10px;
+    }
+
+    .worker-info h3 {
+      margin-bottom: 10px;
+      color: #007bff;
+    }
+
+    .contact-container {
+      max-width: 1000px;
+      margin: 60px auto;
+      padding: 0 20px;
+    }
+
+    .contact-container h1 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 32px;
+      color: #222;
+    }
+
+    .contact-boxes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .contact-box {
+      background: #ffffff;
+      padding: 25px;
+      flex: 1;
+      min-width: 250px;
+      max-width: 300px;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+      transition: transform 0.2s ease;
+    }
+
+    .contact-box:hover {
+      transform: translateY(-5px);
+    }
+
+    .contact-box h2 {
+      color: #0056b3;
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background: #0056b3;
+      color: white;
+      font-size: 14px;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .contact-boxes {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .tracking-section {
+        margin: 20px 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    Local workers
+  </header>
+
+  <!-- Worker Tracking Section -->
+  <section class="tracking-section">
+    <h2>🔍 Track Your Assigned Worker</h2>
+    <input type="text" id="trackingCode" placeholder="Enter Tracking Code / Request ID" />
+    <button onclick="trackWorker()">Track</button>
+    <div id="workerDetails" class="worker-info"></div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact-container">
+    <h1>Get in Touch with Us</h1>
+    <div class="contact-boxes">
+      <div class="contact-box">
+        <h2>📞 Customer Support</h2>
+        <p>We’re here to help you 24/7 for any queries.</p>
+      </div>
+      <div class="contact-box">
+        <h2>🤝 Partner With Us</h2>
+        <p>Want to become a local worker? Join us today!</p>
+      </div>
+      <div class="contact-box">
+        <h2>💬 Feedback</h2>
+        <p>Your feedback helps us improve our services.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    &copy; 2025 Local workers website. All rights reserved.
+  </footer>
+
+  <!-- Firebase + Tracker -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDx8pX-pIxre6aFYmf4_pdE4D770mhghsQ",
+      authDomain: "sunnyservices-738b7.firebaseapp.com",
+      projectId: "sunnyservices-738b7",
+      storageBucket: "sunnyservices-738b7.appspot.com",
+      messagingSenderId: "583577838613",
+      appId: "1:583577838613:web:c74d4db872b4d16fddda1c",
+      measurementId: "G-2BDCSXPBQE"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.trackWorker = async function () {
+      const codeInput = document.getElementById("trackingCode");
+      const code = codeInput.value.trim();
+      const display = document.getElementById("workerDetails");
+
+      display.innerHTML = "";
+      display.style.display = "none";
+
+      if (!code) {
+        display.innerHTML = "<p style='color:red;'>Please enter a valid tracking code.</p>";
+        display.style.display = "block";
+        return;
+      }
+
+      try {
+        const docRef = doc(db, "addresses", code);
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists()) {
+          display.innerHTML = "<p style='color:red;'>No request found with that tracking code.</p>";
+          display.style.display = "block";
+          return;
+        }
+
+        const data = docSnap.data();
+
+        if (data.status !== "accepted" && data.status !== "completed") {
+          display.innerHTML = `<p>✅ Request found but not yet accepted by any worker. Please wait.</p>`;
+          display.style.display = "block";
+          return;
+        }
+
+        if (!data.workerName) {
+          display.innerHTML = `<p>⚠️ Worker has not yet been assigned or info missing.</p>`;
+          display.style.display = "block";
+          return;
+        }
+
+        display.innerHTML = `
+          <h3>👷 Assigned Worker</h3>
+          <p><strong>👤 Name:</strong> ${data.workerName}</p>
+          <p><strong>📞 Phone:</strong> ${data.workerPhone}</p>
+          <p><strong>🎂 Age:</strong> ${data.workerAge || 'N/A'}</p>
+          <p><strong>🚻 Gender:</strong> ${data.workerGender || 'N/A'}</p>
+          <p><strong>📍 Area:</strong> ${data.workerArea || 'N/A'}</p>
+          <p><strong>🎓 Qualification:</strong> ${data.workerQualification || 'N/A'}</p>
+          <p><strong>🛠️ Skills:</strong> ${data.workerSkills || 'N/A'}</p>
+          <p><strong>📦 Status:</strong> 
+            <span style="color: ${data.status === 'completed' ? 'green' : '#ff9900'};">${data.status}</span>
+          </p>
+        `;
+        display.style.display = "block";
+
+      } catch (err) {
+        console.error(err);
+        display.innerHTML = "<p style='color:red;'>Error fetching data. Please try again later.</p>";
+        display.style.display = "block";
+      }
+    };
+  </script>
+</body>
+</html>
+

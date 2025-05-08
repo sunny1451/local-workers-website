@@ -4,64 +4,94 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Service Request with Map</title>
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
-    #map {
-      height: 400px;
-      width: 100%;
-    }
-    #searchBox {
-      position: absolute;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 5;
-      width: 80%;
-      max-width: 600px;
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      background: white;
-    }
-    form {
-      padding: 20px;
-      background: #f4f4f4;
-      max-width: 500px;
-      margin: auto;
-      border-radius: 10px;
-    }
-    input {
-      display: block;
-      width: 100%;
-      margin-bottom: 15px;
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    button {
-      padding: 10px;
-      width: 100%;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    #addressDisplay, #selectedServiceDisplay {
-      text-align: center;
-      margin: 10px;
-      font-weight: bold;
-    }
-  </style>
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f2f5;
+    color: #333;
+  }
+  h2 {
+    text-align: center;
+    padding: 20px;
+    color: #0a66c2;
+    font-size: 24px;
+  }
+  #map {
+    height: 400px;
+    width: 100%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  #searchBox {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    width: 80%;
+    max-width: 600px;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #fff;
+    font-size: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  form {
+    padding: 25px;
+    background: #ffffff;
+    max-width: 500px;
+    margin: 30px auto;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  }
+  input {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    transition: border 0.3s;
+  }
+  input:focus {
+    border-color: #0a66c2;
+    outline: none;
+    box-shadow: 0 0 5px rgba(10, 102, 194, 0.2);
+  }
+  button {
+    padding: 12px;
+    width: 100%;
+    background: linear-gradient(90deg, #007bff, #0056b3);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.3s;
+  }
+  button:hover {
+    background: linear-gradient(90deg, #0056b3, #003d80);
+  }
+  #addressDisplay,
+  #selectedServiceDisplay {
+    text-align: center;
+    margin: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+  }
+  #selectedServiceDisplay {
+    color: #0a66c2;
+  }
+</style>
 </head>
 
 <body>
-  <h2 style="text-align:center">Service Request with Location</h2>
   <input id="searchBox" type="text" placeholder="Search for a location" />
   <div id="map"></div>
 
@@ -76,140 +106,132 @@
   </form>
 
   <!-- Firebase and Google Maps Script -->
-  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&libraries=places" async defer></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&libraries=places" async defer></script>
 
-  <script>
-    async function initMap() {
-      const { Map } = await google.maps.importLibrary("maps");
-      const { Geocoder } = await google.maps.importLibrary("geocoding");
-      const { Autocomplete } = await google.maps.importLibrary("places");
+<script>
+  // Initialize Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg",
+    authDomain: "sunnyservices-738b7.firebaseapp.com",
+    projectId: "sunnyservices-738b7",
+    storageBucket: "sunnyservices-738b7.appspot.com",
+    messagingSenderId: "583577838613",
+    appId: "1:583577838613:web:c74d4db872b4d16fddda1c"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
-      const geocoder = new Geocoder();
-      navigator.geolocation.getCurrentPosition((position) => {
-        const map = new Map(document.getElementById("map"), {
-          center: {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          },
-          zoom: 15,
-        });
+  async function initMap() {
+    const { Map } = await google.maps.importLibrary("maps");
+    const { Geocoder } = await google.maps.importLibrary("geocoding");
+    const { Autocomplete } = await google.maps.importLibrary("places");
 
-        const marker = new google.maps.Marker({
-          map,
-          draggable: true,
-          position: {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          },
-        });
-
-        window.selectedLatLng = marker.getPosition();
-        reverseGeocode(geocoder, window.selectedLatLng);
-
-        const input = document.getElementById("searchBox");
-        const autocomplete = new Autocomplete(input);
-        autocomplete.bindTo("bounds", map);
-
-        autocomplete.addListener("place_changed", () => {
-          const place = autocomplete.getPlace();
-          if (place.geometry) {
-            map.setCenter(place.geometry.location);
-            marker.setPosition(place.geometry.location);
-            window.selectedLatLng = place.geometry.location;
-            reverseGeocode(geocoder, window.selectedLatLng);
-          }
-        });
-
-        marker.addListener("dragend", () => {
-          window.selectedLatLng = marker.getPosition();
-          reverseGeocode(geocoder, window.selectedLatLng);
-        });
-
-        map.addListener("click", (e) => {
-          marker.setPosition(e.latLng);
-          window.selectedLatLng = e.latLng;
-          reverseGeocode(geocoder, window.selectedLatLng);
-        });
+    const geocoder = new Geocoder();
+    navigator.geolocation.getCurrentPosition((position) => {
+      const map = new Map(document.getElementById("map"), {
+        center: {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        },
+        zoom: 15,
       });
 
-      function reverseGeocode(geocoder, latlng) {
-        geocoder.geocode({ location: latlng }, (results, status) => {
-          if (status === "OK" && results[0]) {
-            document.getElementById("addressDisplay").innerText = results[0].formatted_address;
-            window.selectedAddress = parseAddressComponents(results[0].address_components);
-          }
-        });
-      }
+      const marker = new google.maps.Marker({
+        map,
+        draggable: true,
+        position: {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        },
+      });
 
-      function parseAddressComponents(components) {
-        const address = {};
-        for (let component of components) {
-          const types = component.types;
-          if (types.includes("administrative_area_level_1")) address.state = component.long_name;
-          if (types.includes("administrative_area_level_2")) address.district = component.long_name;
-          if (types.includes("sublocality_level_1")) address.mandal = component.long_name;
-          if (types.includes("sublocality_level_2")) address.area = component.long_name;
-          if (types.includes("route")) address.street = component.long_name;
+      window.selectedLatLng = marker.getPosition();
+      reverseGeocode(geocoder, window.selectedLatLng);
+
+      const input = document.getElementById("searchBox");
+      const autocomplete = new Autocomplete(input);
+      autocomplete.bindTo("bounds", map);
+
+      autocomplete.addListener("place_changed", () => {
+        const place = autocomplete.getPlace();
+        if (place.geometry) {
+          map.setCenter(place.geometry.location);
+          marker.setPosition(place.geometry.location);
+          window.selectedLatLng = place.geometry.location;
+          reverseGeocode(geocoder, window.selectedLatLng);
         }
-        return address;
-      }
-    }
-  </script>
+      });
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+      marker.addListener("dragend", () => {
+        window.selectedLatLng = marker.getPosition();
+        reverseGeocode(geocoder, window.selectedLatLng);
+      });
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg",
-      authDomain: "sunnyservices-738b7.firebaseapp.com",
-      projectId: "sunnyservices-738b7",
-      storageBucket: "sunnyservices-738b7.appspot.com",
-      messagingSenderId: "583577838613",
-      appId: "1:583577838613:web:c74d4db872b4d16fddda1c"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // 🔹 Get selected service from localStorage
-    const service = localStorage.getItem("selectedService") || "Not selected";
-    document.getElementById("selectedServiceDisplay").innerText = "Service: " + service;
-
-    document.getElementById("submitForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const name = document.getElementById("fullName").value.trim();
-      const phone = document.getElementById("phoneNumber").value.trim();
-      const house = document.getElementById("houseNo").value.trim();
-
-      if (!window.selectedLatLng || !window.selectedAddress) {
-        alert("❌ Please select a location on the map.");
-        return;
-      }
-
-      try {
-        await addDoc(collection(db, "addresses"), {
-          name,
-          phone,
-          house,
-          lat: window.selectedLatLng.lat(),
-          lng: window.selectedLatLng.lng(),
-          ...window.selectedAddress,
-          service, // 🔹 Include service in Firestore
-          timestamp: serverTimestamp(),
-          status: "pending"
-        });
-
-        alert("✅ Address and service saved successfully!");
-        window.location.href = "confirmation.html"; // replace with your actual next page
-      } catch (err) {
-        console.error("Error saving address:", err);
-        alert("❌ Failed to save. Try again.");
-      }
+      map.addListener("click", (e) => {
+        marker.setPosition(e.latLng);
+        window.selectedLatLng = e.latLng;
+        reverseGeocode(geocoder, window.selectedLatLng);
+      });
     });
-  </script>
+
+    function reverseGeocode(geocoder, latlng) {
+      geocoder.geocode({ location: latlng }, (results, status) => {
+        if (status === "OK" && results[0]) {
+          document.getElementById("addressDisplay").innerText = results[0].formatted_address;
+          window.selectedAddress = parseAddressComponents(results[0].address_components);
+        }
+      });
+    }
+
+    function parseAddressComponents(components) {
+      const address = {};
+      for (let component of components) {
+        const types = component.types;
+        if (types.includes("administrative_area_level_1")) address.state = component.long_name;
+        if (types.includes("administrative_area_level_2")) address.district = component.long_name;
+        if (types.includes("sublocality_level_1")) address.mandal = component.long_name;
+        if (types.includes("sublocality_level_2")) address.area = component.long_name;
+        if (types.includes("route")) address.street = component.long_name;
+      }
+      return address;
+    }
+  }
+
+  // Submit form logic
+  document.getElementById("submitForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("fullName").value.trim();
+    const phone = document.getElementById("phoneNumber").value.trim();
+    const house = document.getElementById("houseNo").value.trim();
+
+    if (!window.selectedLatLng || !window.selectedAddress) {
+      alert("❌ Please select a location on the map.");
+      return;
+    }
+
+    try {
+      await db.collection("addresses").add({
+        name,
+        phone,
+        house,
+        lat: window.selectedLatLng.lat(),
+        lng: window.selectedLatLng.lng(),
+        ...window.selectedAddress,
+        service: localStorage.getItem("selectedService") || "Not selected",
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        status: "pending"
+      });
+
+      alert("✅ Address and service saved successfully!");
+      window.location.href = "confirmation.html"; // replace with your actual next page
+    } catch (err) {
+      console.error("Error saving address:", err);
+      alert("❌ Failed to save. Try again.");
+    }
+  });
+</script>
 </body>
 </html>

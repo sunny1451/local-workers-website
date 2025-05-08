@@ -1,192 +1,243 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Service Request</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f0f2f5;
-      padding: 20px;
-    }
-    h1 {
-      text-align: center;
-      color: #007bff;
-      margin-bottom: 15px;
-      font-weight: 700;
-    }
-    .instruction-box {
-      max-width: 500px;
-      margin: 0 auto 20px;
-      background-color: #e6f4ff;
-      border-left: 5px solid #007bff;
-      padding: 15px 20px;
-      border-radius: 12px;
-      font-size: 15px;
-      color: #003366;
-    }
-    form {
-      max-width: 500px;
-      margin: auto;
-      background: #ffffff;
-      padding: 35px 30px;
-      border-radius: 20px;
-      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
-    }
-    input, select {
-      width: 100%;
-      padding: 14px 16px;
-      margin: 10px 0 20px 0;
-      border: 1.8px solid #d4d4d4;
-      border-radius: 12px;
-      font-size: 16px;
-      background-color: #fafafa;
-      transition: all 0.3s ease;
-    }
-    input:focus, select:focus {
-      border-color: #007bff;
-      background-color: #e8f0fe;
-      outline: none;
-    }
-    button {
-      width: 100%;
-      padding: 14px 16px;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 5px;
-      transition: all 0.3s ease;
-    }
-    button[type="submit"] {
-      background-color: #007bff;
-      color: white;
-    }
-    button[type="submit"]:hover {
-      background-color: #0056b3;
-    }
-    p#selectedServiceDisplay {
-      background: #e8f4ff;
-      padding: 10px;
-      border-radius: 10px;
-      text-align: center;
-      font-weight: 600;
-      color: #0056b3;
-      margin-bottom: 25px;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Service Request with Map</title>
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f2f5;
+    color: #333;
+  }
+  h2 {
+    text-align: center;
+    padding: 20px;
+    color: #0a66c2;
+    font-size: 24px;
+  }
+  #map {
+    height: 400px;
+    width: 100%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  #searchBox {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    width: 80%;
+    max-width: 600px;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #fff;
+    font-size: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  form {
+    padding: 25px;
+    background: #ffffff;
+    max-width: 500px;
+    margin: 30px auto;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  }
+  input {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    transition: border 0.3s;
+  }
+  input:focus {
+    border-color: #0a66c2;
+    outline: none;
+    box-shadow: 0 0 5px rgba(10, 102, 194, 0.2);
+  }
+  button {
+    padding: 12px;
+    width: 100%;
+    background: linear-gradient(90deg, #007bff, #0056b3);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.3s;
+  }
+  button:hover {
+    background: linear-gradient(90deg, #0056b3, #003d80);
+  }
+  #addressDisplay,
+  #selectedServiceDisplay {
+    text-align: center;
+    margin: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+  }
+  #selectedServiceDisplay {
+    color: #0a66c2;
+  }
+</style>
 </head>
+
 <body>
+  <input id="searchBox" type="text" placeholder="Search for a location" />
+  <div id="map"></div>
 
-  <h1>Service Request</h1>
+  <p id="addressDisplay" style="padding: 10px; text-align:center"></p>
+  <p id="selectedServiceDisplay" style="color: #007bff;"></p> <!-- 🔹 Display selected service -->
 
-  <div class="instruction-box">
-    ✅ Fill in accurate details<br>
-    📍 Choose correct city and area<br>
-    📲 You'll be redirected after submitting
-  </div>
-
-  <form id="addressForm">
-    <p id="selectedServiceDisplay"></p>
-
+  <form id="submitForm">
     <input type="text" id="fullName" placeholder="Full Name" required />
     <input type="tel" id="phoneNumber" placeholder="Phone Number" required />
     <input type="text" id="houseNo" placeholder="House/Flat Number" required />
-
-    <select id="city" required>
-      <option value="">Select City</option>
-      <option value="Kukatpally">Kukatpally</option>
-      <option value="Madhapur">Madhapur</option>
-      <option value="Dilsukhnagar">Dilsukhnagar</option>
-      <option value="Ameerpet">Ameerpet</option>
-      <option value="KPHB">KPHB</option>
-    </select>
-
-    <select id="area" required>
-      <option value="">Select Area</option>
-    </select>
-
-    <input type="text" id="exactAddress" placeholder="Exact Address / Landmark" required />
-
-    <button type="submit">Submit Request</button>
+    <button type="submit">Save Address</button>
   </form>
+
+  <!-- Firebase and Google Maps Script -->
+  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&libraries=places" async defer></script>
+
+  <script>
+    async function initMap() {
+      const { Map } = await google.maps.importLibrary("maps");
+      const { Geocoder } = await google.maps.importLibrary("geocoding");
+      const { Autocomplete } = await google.maps.importLibrary("places");
+
+      const geocoder = new Geocoder();
+      navigator.geolocation.getCurrentPosition((position) => {
+        const map = new Map(document.getElementById("map"), {
+          center: {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          },
+          zoom: 15,
+        });
+
+        const marker = new google.maps.Marker({
+          map,
+          draggable: true,
+          position: {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          },
+        });
+
+        window.selectedLatLng = marker.getPosition();
+        reverseGeocode(geocoder, window.selectedLatLng);
+
+        const input = document.getElementById("searchBox");
+        const autocomplete = new Autocomplete(input);
+        autocomplete.bindTo("bounds", map);
+
+        autocomplete.addListener("place_changed", () => {
+          const place = autocomplete.getPlace();
+          if (place.geometry) {
+            map.setCenter(place.geometry.location);
+            marker.setPosition(place.geometry.location);
+            window.selectedLatLng = place.geometry.location;
+            reverseGeocode(geocoder, window.selectedLatLng);
+          }
+        });
+
+        marker.addListener("dragend", () => {
+          window.selectedLatLng = marker.getPosition();
+          reverseGeocode(geocoder, window.selectedLatLng);
+        });
+
+        map.addListener("click", (e) => {
+          marker.setPosition(e.latLng);
+          window.selectedLatLng = e.latLng;
+          reverseGeocode(geocoder, window.selectedLatLng);
+        });
+      });
+
+      function reverseGeocode(geocoder, latlng) {
+        geocoder.geocode({ location: latlng }, (results, status) => {
+          if (status === "OK" && results[0]) {
+            document.getElementById("addressDisplay").innerText = results[0].formatted_address;
+            window.selectedAddress = parseAddressComponents(results[0].address_components);
+          }
+        });
+      }
+
+      function parseAddressComponents(components) {
+        const address = {};
+        for (let component of components) {
+          const types = component.types;
+          if (types.includes("administrative_area_level_1")) address.state = component.long_name;
+          if (types.includes("administrative_area_level_2")) address.district = component.long_name;
+          if (types.includes("sublocality_level_1")) address.mandal = component.long_name;
+          if (types.includes("sublocality_level_2")) address.area = component.long_name;
+          if (types.includes("route")) address.street = component.long_name;
+        }
+        return address;
+      }
+    }
+  </script>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyDx8pX-pIxre6aFYmf4_pdE4D770mhghsQ",
+      apiKey: "AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg",
       authDomain: "sunnyservices-738b7.firebaseapp.com",
       projectId: "sunnyservices-738b7",
       storageBucket: "sunnyservices-738b7.appspot.com",
       messagingSenderId: "583577838613",
-      appId: "1:583577838613:web:c74d4db872b4d16fddda1c",
-      measurementId: "G-2BDCSXPBQE"
+      appId: "1:583577838613:web:c74d4db872b4d16fddda1c"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    // 🔹 Get selected service from localStorage
     const service = localStorage.getItem("selectedService") || "Not selected";
-    document.getElementById("selectedServiceDisplay").textContent = `Service: ${service}`;
+    document.getElementById("selectedServiceDisplay").innerText = "Service: " + service;
 
-    const cityAreaMap = {
-      Kukatpally: ["KPHB Phase 1", "KPHB Phase 2", "Vivekananda Nagar", "Pragathi Nagar", "Kukatpally Housing Board"],
-      Madhapur: ["Image Hospital Area", "Cyber Towers", "Hitech Station", "Ayyappa Society", "Durgam Cheruvu"],
-      Dilsukhnagar: ["Sai Baba Temple Area", "Chaitanyapuri", "LB Nagar Crossroad", "Vijayawada Highway", "Kothapet"],
-      Ameerpet: ["SR Nagar", "Mythri Vanam", "Greenlands", "Punjagutta", "Yousufguda"],
-      KPHB: ["Phase 1", "Phase 2", "Phase 3", "Phase 4", "Phase 5"]
-    };
-
-    const citySelect = document.getElementById("city");
-    const areaSelect = document.getElementById("area");
-
-    citySelect.addEventListener("change", () => {
-      const selectedCity = citySelect.value;
-      areaSelect.innerHTML = '<option value="">Select Area</option>';
-
-      if (selectedCity && cityAreaMap[selectedCity]) {
-        cityAreaMap[selectedCity].forEach(area => {
-          const option = document.createElement("option");
-          option.value = area;
-          option.textContent = area;
-          areaSelect.appendChild(option);
-        });
-      }
-    });
-
-    document.getElementById("addressForm").addEventListener("submit", async (e) => {
+    document.getElementById("submitForm").addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const name = document.getElementById("fullName").value.trim();
       const phone = document.getElementById("phoneNumber").value.trim();
       const house = document.getElementById("houseNo").value.trim();
-      const city = document.getElementById("city").value.trim();
-      const area = document.getElementById("area").value.trim();
-      const exactAddress = document.getElementById("exactAddress").value.trim();
+
+      if (!window.selectedLatLng || !window.selectedAddress) {
+        alert("❌ Please select a location on the map.");
+        return;
+      }
 
       try {
         await addDoc(collection(db, "addresses"), {
           name,
           phone,
           house,
-          city,
-          area,
-          exactAddress,
-          service,
-          status: "pending",
-          timestamp: serverTimestamp()
+          lat: window.selectedLatLng.lat(),
+          lng: window.selectedLatLng.lng(),
+          ...window.selectedAddress,
+          service, // 🔹 Include service in Firestore
+          timestamp: serverTimestamp(),
+          status: "pending"
         });
 
-        alert("✅ Your request has been submitted successfully!");
-        window.location.href = "file:///C:/Users/sunny/OneDrive/Desktop/beautiful%20home/tracking/contact.html"; // 🔄 Redirect to main page
-
+        alert("✅ Address and service saved successfully!");
+        window.location.href = ""; // replace with your actual next page
       } catch (err) {
-        console.error("Error submitting request:", err);
-        alert("❌ Failed to submit. Please try again.");
+        console.error("Error saving address:", err);
+        alert("❌ Failed to save. Try again.");
       }
     });
   </script>

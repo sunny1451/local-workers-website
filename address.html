@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -55,7 +55,6 @@
       border-radius: 8px;
       border: 1px solid #ccc;
       font-size: 16px;
-      transition: border 0.3s;
     }
     input:focus {
       border-color: #0a66c2;
@@ -72,7 +71,6 @@
       cursor: pointer;
       font-size: 16px;
       font-weight: bold;
-      transition: background 0.3s;
     }
     button:hover {
       background: linear-gradient(90deg, #0056b3, #003d80);
@@ -83,7 +81,6 @@
       margin: 10px;
       font-weight: bold;
       font-size: 16px;
-      color: #333;
     }
     #selectedServiceDisplay {
       color: #0a66c2;
@@ -95,8 +92,8 @@
   <input id="searchBox" type="text" placeholder="Search for a location" />
   <div id="map"></div>
 
-  <p id="addressDisplay" style="padding: 10px; text-align:center"></p>
-  <p id="selectedServiceDisplay" style="color: #007bff;"></p> <!-- 🔹 Display selected service -->
+  <p id="addressDisplay"></p>
+  <p id="selectedServiceDisplay"></p>
 
   <form id="submitForm">
     <input type="text" id="fullName" placeholder="Full Name" required />
@@ -105,20 +102,72 @@
     <button type="submit">Save Address</button>
   </form>
 
-  <!-- Firebase and Google Maps Script -->
-  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAR49cUeMmU6PSOzEo04PCxAeOPJevDzR0&callback=initMap&libraries=places" async defer></script>
+  <!-- Firebase (Non-module) -->
+  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore-compat.js"></script>
 
   <script>
-    async function initMap() {
-      const { Map } = await google.maps.importLibrary("maps");
-      const { Geocoder } = await google.maps.importLibrary("geocoding");
-      const { Autocomplete } = await google.maps.importLibrary("places");
+    const firebaseConfig = {
+      apiKey: "AIzaSyAR49cUeMmU6PSOzEo04PCxAeOPJevDzR0",
+      authDomain: "sunnyservices-738b7.firebaseapp.com",
+      projectId: "sunnyservices-738b7",
+      storageBucket: "sunnyservices-738b7.appspot.com",
+      messagingSenderId: "583577838613",
+      appId: "1:583577838613:web:c74d4db872b4d16fddda1c"
+    };
 
-      const geocoder = new Geocoder();
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Show selected service
+    const service = localStorage.getItem("selectedService") || "Not selected";
+    document.getElementById("selectedServiceDisplay").innerText = "Service: " + service;
+
+    document.getElementById("submitForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById("fullName").value.trim();
+      const phone = document.getElementById("phoneNumber").value.trim();
+      const house = document.getElementById("houseNo").value.trim();
+
+      if (!window.selectedLatLng || !window.selectedAddress) {
+        alert("❌ Please select a location on the map.");
+        return;
+      }
+
+      try {
+        await db.collection("addresses").add({
+          name,
+          phone,
+          house,
+          lat: window.selectedLatLng.lat(),
+          lng: window.selectedLatLng.lng(),
+          ...window.selectedAddress,
+          service,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          status: "pending"
+        });
+
+        alert("✅ Address and service saved successfully!");
+        window.location.href = "contact.html"; // ✅ Use relative path
+      } catch (err) {
+        console.error("Error saving address:", err);
+        alert("❌ Failed to save. Try again.");
+      }
+    });
+  </script>
+
+  <!-- Google Maps API (async) -->
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAR49cUeMmU6PSOzEo04PCxAeOPJevDzR0&callback=initMap&libraries=places">
+  </script>
+
+  <script>
+    function initMap() {
+      const geocoder = new google.maps.Geocoder();
+
       navigator.geolocation.getCurrentPosition((position) => {
-        const map = new Map(document.getElementById("map"), {
+        const map = new google.maps.Map(document.getElementById("map"), {
           center: {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
@@ -139,7 +188,7 @@
         reverseGeocode(geocoder, window.selectedLatLng);
 
         const input = document.getElementById("searchBox");
-        const autocomplete = new Autocomplete(input);
+        const autocomplete = new google.maps.places.Autocomplete(input);
         autocomplete.bindTo("bounds", map);
 
         autocomplete.addListener("place_changed", () => {
@@ -186,60 +235,6 @@
         return address;
       }
     }
-  </script>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAR49cUeMmU6PSOzEo04PCxAeOPJevDzR0",
-      authDomain: "sunnyservices-738b7.firebaseapp.com",
-      projectId: "sunnyservices-738b7",
-      storageBucket: "sunnyservices-738b7.appspot.com",
-      messagingSenderId: "583577838613",
-      appId: "1:583577838613:web:c74d4db872b4d16fddda1c"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // 🔹 Get selected service from localStorage
-    const service = localStorage.getItem("selectedService") || "Not selected";
-    document.getElementById("selectedServiceDisplay").innerText = "Service: " + service;
-
-    document.getElementById("submitForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const name = document.getElementById("fullName").value.trim();
-      const phone = document.getElementById("phoneNumber").value.trim();
-      const house = document.getElementById("houseNo").value.trim();
-
-      if (!window.selectedLatLng || !window.selectedAddress) {
-        alert("❌ Please select a location on the map.");
-        return;
-      }
-
-      try {
-        await addDoc(collection(db, "addresses"), {
-          name,
-          phone,
-          house,
-          lat: window.selectedLatLng.lat(),
-          lng: window.selectedLatLng.lng(),
-          ...window.selectedAddress,
-          service, // 🔹 Include service in Firestore
-          timestamp: serverTimestamp(),
-          status: "pending"
-        });
-
-        alert("✅ Address and service saved successfully!");
-        window.location.href = "file:///C:/Users/sunny/OneDrive/Desktop/beautiful%20home/tracking/contact.html"; // replace with your actual next page
-      } catch (err) {
-        console.error("Error saving address:", err);
-        alert("❌ Failed to save. Try again.");
-      }
-    });
   </script>
 </body>
 </html>
